@@ -1,12 +1,12 @@
 import { ServerUrlResolutionStatus } from '../common/types/ServerUrlResolutionStatus';
 import { resolveServerUrl } from './resolveServerUrl';
 
-jest.mock('../ui/main/rootWindow', () => ({
+jest.mock('./rootWindow', () => ({
   __esModule: true,
   getRootWindow: jest.fn(() => ({ webContents: null })),
 }));
 
-jest.mock('../ipc/main', () => ({
+jest.mock('./ipc', () => ({
   __esModule: true,
   invoke: jest.fn(async (_webContents, channel, ...args) => {
     if (channel === 'servers/fetch-info') {
