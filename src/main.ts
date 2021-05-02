@@ -21,7 +21,6 @@ import { setupErrorHandling } from './mainProcess/setupErrorHandling';
 import { setupNavigation } from './mainProcess/setupNavigation';
 import { setupPowerMonitor } from './mainProcess/setupPowerMonitor';
 import { setupScreenSharing } from './mainProcess/setupScreenSharing';
-import { setupServers } from './mainProcess/setupServers';
 import { setupSpellChecking } from './mainProcess/setupSpellChecking';
 import touchBar from './mainProcess/touchBar';
 import trayIcon from './mainProcess/trayIcon';
@@ -57,7 +56,6 @@ const start = async (): Promise<void> => {
   setupPowerMonitor();
   setupUpdates();
   setupDownloads();
-  setupServers();
 
   dock.setUp();
   menuBar.setUp();

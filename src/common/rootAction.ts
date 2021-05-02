@@ -3,7 +3,6 @@ import { DownloadsActionTypeToPayloadMap } from './actions/downloadsActions';
 import { NavigationActionTypeToPayloadMap } from './actions/navigationActions';
 import { NotificationsActionTypeToPayloadMap } from './actions/notificationsActions';
 import { ScreenSharingActionTypeToPayloadMap } from './actions/screenSharingActions';
-import { ServersActionTypeToPayloadMap } from './actions/serversActions';
 import { SpellCheckingActionTypeToPayloadMap } from './actions/spellCheckingActions';
 import { UiActionTypeToPayloadMap } from './actions/uiActions';
 import { UpdatesActionTypeToPayloadMap } from './actions/updatesActions';
@@ -14,7 +13,6 @@ type ActionTypeToPayloadMap = DeepLinksActionTypeToPayloadMap &
   NavigationActionTypeToPayloadMap &
   NotificationsActionTypeToPayloadMap &
   ScreenSharingActionTypeToPayloadMap &
-  ServersActionTypeToPayloadMap &
   SpellCheckingActionTypeToPayloadMap &
   UiActionTypeToPayloadMap &
   UpdatesActionTypeToPayloadMap &

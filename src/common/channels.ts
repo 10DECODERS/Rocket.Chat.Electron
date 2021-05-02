@@ -2,12 +2,13 @@ import { AnyAction } from 'redux';
 
 import { Download } from './types/Download';
 import { Server } from './types/Server';
+import { ServerUrlResolutionResult } from './types/ServerUrlResolutionResult';
 import { SystemIdleState } from './types/SystemIdleState';
 
 type ChannelToArgsMap = {
   'redux/get-preloaded-state': () => unknown;
   'redux/action-dispatched': (action: AnyAction) => void;
-  'servers/fetch-info': (urlHref: string) => [urlHref: string, version: string];
+  'servers/resolve-url': (input: string) => ServerUrlResolutionResult;
   'notifications/fetch-icon': (urlHref: string) => string;
   'power-monitor/get-system-idle-state': (
     idleThreshold: number

@@ -1,21 +1,18 @@
 import { ServerUrlResolutionStatus } from '../common/types/ServerUrlResolutionStatus';
 import { resolveServerUrl } from './resolveServerUrl';
 
-jest.mock('./rootWindow', () => ({
-  __esModule: true,
-  getRootWindow: jest.fn(() => ({ webContents: null })),
-}));
-
-jest.mock('./ipc', () => ({
-  __esModule: true,
-  invoke: jest.fn(async (_webContents, channel, ...args) => {
-    if (channel === 'servers/fetch-info') {
-      return [args[0], '3.8.0'];
-    }
-
-    return null;
-  }),
-}));
+jest.mock(
+  './fetchServerInformation',
+  (): typeof import('./fetchServerInformation') & { __esModule: true } => ({
+    __esModule: true,
+    fetchServerInformation: jest.fn(
+      async (urlHref: string): Promise<[urlHref: string, version: string]> => [
+        urlHref,
+        '3.8.0',
+      ]
+    ),
+  })
+);
 
 it.each([
   ['localhost', 'https://localhost/'],
