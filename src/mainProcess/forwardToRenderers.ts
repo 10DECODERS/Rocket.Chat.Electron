@@ -12,7 +12,7 @@ import { handle, invoke } from './ipc';
 export const forwardToRenderers: Middleware = (api: MiddlewareAPI) => {
   const renderers = new Set<WebContents>();
 
-  handle('redux/get-initial-state', async (webContents) => {
+  handle('redux/get-preloaded-state', async (webContents) => {
     renderers.add(webContents);
 
     webContents.addListener('destroyed', () => {

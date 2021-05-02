@@ -5,7 +5,7 @@ import { Server } from './types/Server';
 import { SystemIdleState } from './types/SystemIdleState';
 
 type ChannelToArgsMap = {
-  'redux/get-initial-state': () => unknown;
+  'redux/get-preloaded-state': () => unknown;
   'redux/action-dispatched': (action: AnyAction) => void;
   'servers/fetch-info': (urlHref: string) => [urlHref: string, version: string];
   'notifications/fetch-icon': (urlHref: string) => string;

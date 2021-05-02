@@ -1,5 +1,10 @@
 import { InitOptions } from 'i18next';
 
+import { getTranslationLanguage } from './getTranslationLanguage';
+import resources from './i18n';
+
+const fallbackLng = 'en' as const;
+
 const byteUnits = [
   'byte',
   'kilobyte',
@@ -90,26 +95,48 @@ const formatDuration = (duration: number): string => {
   return formatter.format(duration, 'year');
 };
 
-export const interpolation: InitOptions['interpolation'] = {
-  format: (value, format, lng) => {
-    if (value instanceof Date && !Number.isNaN(value.getTime())) {
-      return new Intl.DateTimeFormat(lng).format(value);
-    }
+export const getI18nInitOptions = async (
+  locale: string
+): Promise<InitOptions> => {
+  const lng = getTranslationLanguage(locale);
 
-    switch (format) {
-      case 'byteSize':
-        return formatBytes(value);
+  return {
+    lng,
+    fallbackLng,
+    resources: {
+      ...(lng &&
+        lng in resources && {
+          [lng]: {
+            translation: await resources[lng](),
+          },
+        }),
+      [fallbackLng]: {
+        translation: await resources[fallbackLng](),
+      },
+    },
+    interpolation: {
+      format: (value, format, lng) => {
+        if (value instanceof Date && !Number.isNaN(value.getTime())) {
+          return new Intl.DateTimeFormat(lng).format(value);
+        }
 
-      case 'byteSpeed':
-        return formatByteSpeed(value);
+        switch (format) {
+          case 'byteSize':
+            return formatBytes(value);
 
-      case 'percentage':
-        return formatPercentage(value);
+          case 'byteSpeed':
+            return formatByteSpeed(value);
 
-      case 'duration':
-        return formatDuration(value);
-    }
+          case 'percentage':
+            return formatPercentage(value);
 
-    return String(value);
-  },
+          case 'duration':
+            return formatDuration(value);
+        }
+
+        return String(value);
+      },
+    },
+    initImmediate: true,
+  };
 };

@@ -1,7 +1,5 @@
-import { AppActionTypeToPayloadMap } from './actions/appActions';
 import { DeepLinksActionTypeToPayloadMap } from './actions/deepLinksActions';
 import { DownloadsActionTypeToPayloadMap } from './actions/downloadsActions';
-import { I18nActionTypeToPayloadMap } from './actions/i18nActions';
 import { NavigationActionTypeToPayloadMap } from './actions/navigationActions';
 import { NotificationsActionTypeToPayloadMap } from './actions/notificationsActions';
 import { ScreenSharingActionTypeToPayloadMap } from './actions/screenSharingActions';
@@ -11,10 +9,8 @@ import { UiActionTypeToPayloadMap } from './actions/uiActions';
 import { UpdatesActionTypeToPayloadMap } from './actions/updatesActions';
 import { UserPresenceActionTypeToPayloadMap } from './actions/userPresenceActions';
 
-type ActionTypeToPayloadMap = AppActionTypeToPayloadMap &
-  DeepLinksActionTypeToPayloadMap &
+type ActionTypeToPayloadMap = DeepLinksActionTypeToPayloadMap &
   DownloadsActionTypeToPayloadMap &
-  I18nActionTypeToPayloadMap &
   NavigationActionTypeToPayloadMap &
   NotificationsActionTypeToPayloadMap &
   ScreenSharingActionTypeToPayloadMap &

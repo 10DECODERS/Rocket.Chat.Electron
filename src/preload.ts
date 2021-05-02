@@ -15,7 +15,7 @@ import { setServerUrl } from './preloadScript/urls';
 import { listenToUserPresenceChanges } from './preloadScript/userPresence';
 import { createRendererReduxStore } from './rendererProcess/createRendererReduxStore';
 import { invoke } from './rendererProcess/ipc';
-import { setupRendererErrorHandling } from './rendererProcess/setupRendererErrorHandling';
+import { setupErrorHandling } from './rendererProcess/setupErrorHandling';
 import { whenReady } from './rendererProcess/whenReady';
 
 declare global {
@@ -42,7 +42,7 @@ const start = async (): Promise<void> => {
 
   await whenReady();
 
-  setupRendererErrorHandling('webviewPreload');
+  setupErrorHandling('webviewPreload');
 
   await invoke('server-view/ready');
 

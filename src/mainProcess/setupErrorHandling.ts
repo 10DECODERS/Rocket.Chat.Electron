@@ -1,7 +1,7 @@
 import Bugsnag from '@bugsnag/js';
 import { app, dialog } from 'electron';
 
-export const setupMainErrorHandling = (): void => {
+export const setupErrorHandling = (): void => {
   if (process.env.BUGSNAG_API_KEY) {
     Bugsnag.start({
       apiKey: process.env.BUGSNAG_API_KEY,

@@ -4,8 +4,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { withStore } from './common/withStore';
 import { App } from './rendererProcess/components/App';
 import { createRendererReduxStore } from './rendererProcess/createRendererReduxStore';
+import { setupErrorHandling } from './rendererProcess/setupErrorHandling';
 import { setupI18n } from './rendererProcess/setupI18n';
-import { setupRendererErrorHandling } from './rendererProcess/setupRendererErrorHandling';
 import { whenReady } from './rendererProcess/whenReady';
 
 const start = async (): Promise<void> => {
@@ -14,7 +14,7 @@ const start = async (): Promise<void> => {
 
   await whenReady();
 
-  setupRendererErrorHandling('rootWindow');
+  setupErrorHandling('rootWindow');
   await setupI18n();
 
   (
