@@ -7,7 +7,7 @@ import {
   SELECT_CLIENT_CERTIFICATE_DIALOG_CERTIFICATE_SELECTED,
   SELECT_CLIENT_CERTIFICATE_DIALOG_DISMISSED,
 } from '../common/actions/navigationActions';
-import { request, select, dispatch } from '../store';
+import { request, select, dispatch } from '../common/store';
 import {
   AskForCertificateTrustResponse,
   askForCertificateTrust,

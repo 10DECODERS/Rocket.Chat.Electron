@@ -1,26 +1,8 @@
-import { applyMiddleware, createStore, Store, compose } from 'redux';
-
-import { catchLastAction, lastAction } from '../common/catchLastAction';
-import { RootAction } from '../common/rootAction';
-import { rootReducer, RootState } from '../common/rootReducer';
-import { reduxStore, withStore } from '../common/withStore';
+import { lastAction } from './catchLastAction';
 import { hasPayload, isErrored, isResponseTo } from './fsa';
-import { getInitialState, forwardToMain } from './ipc';
-
-export const createRendererReduxStore = async (): Promise<Store> => {
-  const initialState = await getInitialState();
-  const composeEnhancers: typeof compose =
-    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  const enhancers = composeEnhancers(
-    applyMiddleware(forwardToMain, catchLastAction)
-  );
-
-  const reduxStore = createStore(rootReducer, initialState, enhancers);
-
-  withStore(reduxStore);
-
-  return reduxStore;
-};
+import { RootAction } from './rootAction';
+import { RootState } from './rootReducer';
+import { reduxStore } from './withStore';
 
 export const dispatch = <Action extends RootAction>(action: Action): void => {
   reduxStore.dispatch(action);

@@ -1,6 +1,4 @@
-import { UPDATES_READY } from '../common/actions/updatesActions';
 import { RootState } from '../common/rootReducer';
-import { dispatch } from '../store';
 import { joinAppPath } from './joinAppPath';
 import { joinUserPath } from './joinUserPath';
 import { readJsonObject } from './readJsonObject';
@@ -52,11 +50,6 @@ export const mergeUpdatesConfiguration = async (
   ) {
     configuration.skippedUpdateVersion = userConfiguration.skip;
   }
-
-  dispatch({
-    type: UPDATES_READY,
-    payload: configuration,
-  });
 
   return {
     ...state,

@@ -14,9 +14,9 @@ import {
   DOWNLOAD_REMOVED,
   DOWNLOAD_UPDATED,
 } from '../common/actions/downloadsActions';
+import { dispatch, select } from '../common/store';
 import { Download } from '../common/types/Download';
 import { DownloadStatus } from '../common/types/DownloadStatus';
-import { dispatch, select } from '../store';
 import { handle } from './ipc';
 
 const items = new Map<Download['itemId'], DownloadItem>();

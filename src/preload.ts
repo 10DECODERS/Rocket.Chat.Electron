@@ -13,10 +13,10 @@ import { listenToScreenSharingRequests } from './preloadScript/screenSharing';
 import { handleTrafficLightsSpacing } from './preloadScript/trafficLights';
 import { setServerUrl } from './preloadScript/urls';
 import { listenToUserPresenceChanges } from './preloadScript/userPresence';
+import { createRendererReduxStore } from './rendererProcess/createRendererReduxStore';
 import { invoke } from './rendererProcess/ipc';
 import { setupRendererErrorHandling } from './rendererProcess/setupRendererErrorHandling';
 import { whenReady } from './rendererProcess/whenReady';
-import { createRendererReduxStore } from './store';
 
 declare global {
   interface Window {

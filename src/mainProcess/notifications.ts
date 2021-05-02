@@ -10,9 +10,9 @@ import {
   NOTIFICATIONS_NOTIFICATION_ACTIONED,
   NOTIFICATIONS_NOTIFICATION_DISMISSED,
 } from '../common/actions/notificationsActions';
+import { isResponse } from '../common/fsa';
+import { dispatch, listen } from '../common/store';
 import { ExtendedNotificationOptions } from '../common/types/ExtendedNotificationOptions';
-import { dispatch, listen } from '../store';
-import { isResponse } from '../store/fsa';
 import { invoke } from './ipc';
 import { getRootWindow } from './rootWindow';
 

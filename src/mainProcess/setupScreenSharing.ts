@@ -3,9 +3,9 @@ import {
   WEBVIEW_SCREEN_SHARING_SOURCE_REQUESTED,
   WEBVIEW_SCREEN_SHARING_SOURCE_RESPONDED,
 } from '../common/actions/uiActions';
+import { hasMeta, isResponseTo } from '../common/fsa';
 import { ActionOf, RootAction } from '../common/rootAction';
-import { dispatch, listen } from '../store';
-import { hasMeta, isResponseTo } from '../store/fsa';
+import { dispatch, listen } from '../common/store';
 
 export const setupScreenSharing = (): void => {
   listen(WEBVIEW_SCREEN_SHARING_SOURCE_REQUESTED, (requestAction) => {

@@ -19,10 +19,10 @@ import {
   selectGlobalBadgeCount,
 } from '../common/badgeSelectors';
 import { RootState } from '../common/rootReducer';
+import { dispatch, select, watch, listen } from '../common/store';
 import { RootWindowIcon } from '../common/types/RootWindowIcon';
 import { Server } from '../common/types/Server';
 import { WindowState } from '../common/types/WindowState';
-import { dispatch, select, watch, listen } from '../store';
 import { getTrayIconPath } from './icons';
 import { joinAsarPath } from './joinAsarPath';
 import { setupRootWindowReload } from './setupRootWindowReload';

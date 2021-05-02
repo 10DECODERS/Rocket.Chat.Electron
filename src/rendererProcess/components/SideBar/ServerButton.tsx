@@ -1,14 +1,12 @@
 import { parse } from 'url';
 
 import React, { useMemo, FC, DragEvent, MouseEvent } from 'react';
-import { useDispatch } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import {
   SIDE_BAR_SERVER_SELECTED,
   SIDE_BAR_CONTEXT_MENU_TRIGGERED,
 } from '../../../common/actions/uiActions';
-import { RootAction } from '../../../common/rootAction';
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
 import {
   Avatar,
   Badge,
@@ -49,7 +47,7 @@ const ServerButton: FC<ServerButtonProps> = ({
   onDragEnter,
   onDrop,
 }) => {
-  const dispatch = useDispatch<Dispatch<RootAction>>();
+  const dispatch = useAppDispatch();
 
   const handleServerClick = (): void => {
     dispatch({ type: SIDE_BAR_SERVER_SELECTED, payload: url });

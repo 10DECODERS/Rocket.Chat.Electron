@@ -6,10 +6,11 @@ import {
   I18N_LNG_REQUESTED,
   I18N_LNG_RESPONDED,
 } from './common/actions/i18nActions';
-import { getInitialState } from './common/getInitialState';
+import { hasMeta } from './common/fsa';
 import { getTranslationLanguage } from './common/getTranslationLanguage';
 import resources from './common/i18n';
 import { isTranslationLanguage } from './common/isTranslationLanguage';
+import { dispatch, listen } from './common/store';
 import { fallbackLng } from './common/utils/fallbackLng';
 import { interpolation } from './common/utils/interpolation';
 import { withStore } from './common/withStore';
@@ -20,12 +21,7 @@ import {
 } from './mainProcess/deepLinks';
 import dock from './mainProcess/dock';
 import { setupDownloads } from './mainProcess/downloads';
-import { exportLocalStorage } from './mainProcess/exportLocalStorage';
 import menuBar from './mainProcess/menuBar';
-import { mergePersistableValues } from './mainProcess/mergePersistableValues';
-import { mergeServers } from './mainProcess/mergeServers';
-import { mergeTrustedCertificates } from './mainProcess/mergeTrustedCertificates';
-import { mergeUpdatesConfiguration } from './mainProcess/mergeUpdatesConfiguration';
 import { setupNotifications } from './mainProcess/notifications';
 import { performElectronStartup } from './mainProcess/performElectronStartup';
 import { createRootWindow, showRootWindow } from './mainProcess/rootWindow';
@@ -42,24 +38,15 @@ import touchBar from './mainProcess/touchBar';
 import trayIcon from './mainProcess/trayIcon';
 import { setupUpdates } from './mainProcess/updates';
 import { watchAndPersistChanges } from './mainProcess/watchAndPersistChanges';
-import { dispatch, listen } from './store';
-import { hasMeta } from './store/fsa';
 
 const start = async (): Promise<void> => {
   setUserDataDirectory();
   setupMainErrorHandling();
   performElectronStartup();
 
-  withStore(await createMainReduxStore());
-
   await app.whenReady();
 
-  const localStorage = await exportLocalStorage();
-  await Promise.resolve(getInitialState())
-    .then((state) => mergePersistableValues(state, localStorage))
-    .then((state) => mergeServers(state, localStorage))
-    .then((state) => mergeUpdatesConfiguration(state))
-    .then((state) => mergeTrustedCertificates(state));
+  withStore(await createMainReduxStore());
 
   const lng = getTranslationLanguage(app.getLocale());
 
@@ -81,8 +68,6 @@ const start = async (): Promise<void> => {
     initImmediate: true,
   });
 
-  setupApp();
-
   createRootWindow();
   attachGuestWebContentsEvents();
   await showRootWindow();
@@ -92,6 +77,7 @@ const start = async (): Promise<void> => {
   //   installDevTools();
   // }
 
+  setupApp();
   setupNotifications();
   setupScreenSharing();
   setupSpellChecking();

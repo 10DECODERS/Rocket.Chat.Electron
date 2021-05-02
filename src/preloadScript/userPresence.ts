@@ -2,9 +2,9 @@ import {
   SYSTEM_SUSPENDING,
   SYSTEM_LOCKING_SCREEN,
 } from '../common/actions/userPresenceActions';
+import { listen } from '../common/store';
 import { SystemIdleState } from '../common/types/SystemIdleState';
 import { invoke } from '../rendererProcess/ipc';
-import { listen } from '../store';
 
 let isAutoAwayEnabled: boolean;
 let idleThreshold: number | null;

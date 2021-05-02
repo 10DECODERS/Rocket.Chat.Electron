@@ -4,7 +4,7 @@ import {
   SYSTEM_SUSPENDING,
   SYSTEM_LOCKING_SCREEN,
 } from '../common/actions/userPresenceActions';
-import { dispatch } from '../store';
+import { dispatch } from '../common/store';
 import { handle } from './ipc';
 
 export const setupPowerMonitor = (): void => {

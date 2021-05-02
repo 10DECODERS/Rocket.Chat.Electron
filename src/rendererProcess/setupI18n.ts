@@ -6,9 +6,9 @@ import {
   I18N_LNG_RESPONDED,
 } from '../common/actions/i18nActions';
 import resources from '../common/i18n';
+import { request } from '../common/store';
 import { fallbackLng } from '../common/utils/fallbackLng';
 import { interpolation } from '../common/utils/interpolation';
-import { request } from '../store';
 
 export const setupI18n = async (): Promise<void> => {
   const lng =

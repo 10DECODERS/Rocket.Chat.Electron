@@ -2,8 +2,8 @@ import {
   SERVER_URL_RESOLUTION_REQUESTED,
   SERVER_URL_RESOLVED,
 } from '../common/actions/serversActions';
-import { dispatch, listen } from '../store';
-import { hasMeta } from '../store/fsa';
+import { hasMeta } from '../common/fsa';
+import { dispatch, listen } from '../common/store';
 import { resolveServerUrl } from './resolveServerUrl';
 
 export const setupServers = async (): Promise<void> => {

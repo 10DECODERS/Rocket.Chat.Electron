@@ -1,6 +1,6 @@
 import { WEBVIEW_SIDEBAR_STYLE_CHANGED } from '../common/actions/uiActions';
+import { dispatch } from '../common/store';
 import { Server } from '../common/types/Server';
-import { dispatch } from '../store';
 import { getServerUrl, getAbsoluteUrl } from './urls';
 
 let timer: ReturnType<typeof setTimeout>;

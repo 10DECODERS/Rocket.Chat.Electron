@@ -13,7 +13,7 @@ import {
   UPDATES_NEW_VERSION_AVAILABLE,
   UPDATES_NEW_VERSION_NOT_AVAILABLE,
 } from '../common/actions/updatesActions';
-import { listen, dispatch, select } from '../store';
+import { listen, dispatch, select } from '../common/store';
 import {
   askUpdateInstall,
   AskUpdateInstallResponse,

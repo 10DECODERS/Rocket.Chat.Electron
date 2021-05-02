@@ -1,6 +1,4 @@
-import { CERTIFICATES_LOADED } from '../common/actions/navigationActions';
 import { RootState } from '../common/rootReducer';
-import { dispatch } from '../store';
 import { joinUserPath } from './joinUserPath';
 import { readJsonObject } from './readJsonObject';
 
@@ -20,11 +18,6 @@ export const mergeTrustedCertificates = async (
       )
     ),
   };
-
-  dispatch({
-    type: CERTIFICATES_LOADED,
-    payload: merged,
-  });
 
   return {
     ...state,

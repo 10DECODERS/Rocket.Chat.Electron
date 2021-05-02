@@ -1,5 +1,5 @@
 import { EXTERNAL_PROTOCOL_PERMISSION_UPDATED } from '../common/actions/navigationActions';
-import { select, dispatch } from '../store';
+import { select, dispatch } from '../common/store';
 import { askForOpeningExternalProtocol } from './dialogs';
 
 export const isProtocolAllowed = async (rawUrl: string): Promise<boolean> => {

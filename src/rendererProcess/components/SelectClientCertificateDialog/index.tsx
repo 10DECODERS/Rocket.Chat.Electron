@@ -2,27 +2,25 @@ import { Box, Button, Margins, Scrollable, Tile } from '@rocket.chat/fuselage';
 import { Certificate } from 'electron';
 import React, { FC, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import {
   CERTIFICATES_CLIENT_CERTIFICATE_REQUESTED,
   SELECT_CLIENT_CERTIFICATE_DIALOG_CERTIFICATE_SELECTED,
   SELECT_CLIENT_CERTIFICATE_DIALOG_DISMISSED,
 } from '../../../common/actions/navigationActions';
-import { RootAction } from '../../../common/rootAction';
-import { RootState } from '../../../common/rootReducer';
-import { listen } from '../../../store';
-import { isResponse } from '../../../store/fsa';
+import { isResponse } from '../../../common/fsa';
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
+import { useAppSelector } from '../../../common/hooks/useAppSelector';
+import { listen } from '../../../common/store';
 import { Dialog } from '../Dialog';
 
 export const SelectClientCertificateDialog: FC = () => {
-  const openDialog = useSelector(({ openDialog }: RootState) => openDialog);
-  const clientCertificates = useSelector(
-    ({ clientCertificates }: RootState) => clientCertificates
+  const openDialog = useAppSelector(({ openDialog }) => openDialog);
+  const clientCertificates = useAppSelector(
+    ({ clientCertificates }) => clientCertificates
   );
   const isVisible = openDialog === 'select-client-certificate';
-  const dispatch = useDispatch<Dispatch<RootAction>>();
+  const dispatch = useAppDispatch();
 
   const requestIdRef = useRef<unknown>();
 

@@ -1,8 +1,6 @@
-import { APP_SETTINGS_LOADED } from '../common/actions/appActions';
 import { RootState } from '../common/rootReducer';
 import { selectPersistableValues } from '../common/selectPersistableValues';
 import { PersistableValues } from '../common/types/PersistableValues';
-import { dispatch } from '../store';
 import { joinUserPath } from './joinUserPath';
 import { getPersistedValues } from './persistence';
 import { readJsonObject } from './readJsonObject';
@@ -131,11 +129,6 @@ export const mergePersistableValues = async (
       },
     },
   };
-
-  dispatch({
-    type: APP_SETTINGS_LOADED,
-    payload: values,
-  });
 
   return {
     ...state,

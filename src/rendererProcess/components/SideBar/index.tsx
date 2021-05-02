@@ -3,16 +3,14 @@ import { parse } from 'url';
 import { Icon } from '@rocket.chat/fuselage';
 import React, { useMemo, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
 import { createSelector } from 'reselect';
 
 import {
   SIDE_BAR_ADD_NEW_SERVER_CLICKED,
   SIDE_BAR_DOWNLOADS_BUTTON_CLICKED,
 } from '../../../common/actions/uiActions';
-import { RootAction } from '../../../common/rootAction';
-import { RootState } from '../../../common/rootReducer';
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
+import { useAppSelector } from '../../../common/hooks/useAppSelector';
 import ServerButton from './ServerButton';
 import {
   AddServerButton,
@@ -26,10 +24,10 @@ import { useKeyboardShortcuts } from './useKeyboardShortcuts';
 import { useSorting } from './useSorting';
 
 export const SideBar: FC = () => {
-  const servers = useSelector(
+  const servers = useAppSelector(
     createSelector(
-      ({ currentView }: RootState) => currentView,
-      ({ servers }: RootState) => servers,
+      ({ currentView }) => currentView,
+      ({ servers }) => servers,
       (currentView, servers) =>
         servers.map((server) =>
           Object.assign(server, {
@@ -41,8 +39,8 @@ export const SideBar: FC = () => {
         )
     )
   );
-  const isSideBarEnabled = useSelector(
-    ({ isSideBarEnabled }: RootState) => isSideBarEnabled
+  const isSideBarEnabled = useAppSelector(
+    ({ isSideBarEnabled }) => isSideBarEnabled
   );
   const isVisible = servers.length > 0 && isSideBarEnabled;
 
@@ -61,7 +59,7 @@ export const SideBar: FC = () => {
     handleDrop,
   } = useSorting(servers);
 
-  const dispatch = useDispatch<Dispatch<RootAction>>();
+  const dispatch = useAppDispatch();
 
   const handleAddServerButtonClicked = (): void => {
     dispatch({ type: SIDE_BAR_ADD_NEW_SERVER_CLICKED });

@@ -19,8 +19,6 @@ import React, {
   ChangeEvent,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import {
   SERVER_URL_RESOLVED,
@@ -28,19 +26,19 @@ import {
 } from '../../../common/actions/serversActions';
 import { ADD_SERVER_VIEW_SERVER_ADDED } from '../../../common/actions/uiActions';
 import { RocketChatLogo } from '../../../common/assets/RocketChatLogo';
-import { RootAction } from '../../../common/rootAction';
-import { RootState } from '../../../common/rootReducer';
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
+import { useAppSelector } from '../../../common/hooks/useAppSelector';
+import { request } from '../../../common/store';
 import { ServerUrlResolutionStatus } from '../../../common/types/ServerUrlResolutionStatus';
-import { request } from '../../../store';
 import { Wrapper } from './styles';
 
 const defaultServerUrl = new URL('https://open.rocket.chat/');
 
 export const AddServerView: FC = () => {
-  const isVisible = useSelector(
-    ({ currentView }: RootState) => currentView === 'add-new-server'
+  const isVisible = useAppSelector(
+    ({ currentView }) => currentView === 'add-new-server'
   );
-  const dispatch = useDispatch<Dispatch<RootAction>>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [input, setInput] = useState('');
 

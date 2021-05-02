@@ -3,10 +3,10 @@ import { render, unmountComponentAtNode } from 'react-dom';
 
 import { withStore } from './common/withStore';
 import { App } from './rendererProcess/components/App';
+import { createRendererReduxStore } from './rendererProcess/createRendererReduxStore';
 import { setupI18n } from './rendererProcess/setupI18n';
 import { setupRendererErrorHandling } from './rendererProcess/setupRendererErrorHandling';
 import { whenReady } from './rendererProcess/whenReady';
-import { createRendererReduxStore } from './store';
 
 const start = async (): Promise<void> => {
   const reduxStore = await createRendererReduxStore();

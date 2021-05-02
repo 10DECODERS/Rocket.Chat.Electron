@@ -1,5 +1,5 @@
 import { selectPersistableValues } from '../common/selectPersistableValues';
-import { watch } from '../store';
+import { watch } from '../common/store';
 import { persistValues } from './persistence';
 
 export const watchAndPersistChanges = (): void => {

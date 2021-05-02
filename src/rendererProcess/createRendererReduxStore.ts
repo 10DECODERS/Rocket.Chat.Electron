@@ -2,7 +2,8 @@ import { applyMiddleware, createStore, Store, compose } from 'redux';
 
 import { catchLastAction } from '../common/catchLastAction';
 import { rootReducer, RootState } from '../common/rootReducer';
-import { getInitialState, forwardToMain } from '../store/ipc';
+import { forwardToMain } from './forwardToMain';
+import { getPreloadedState } from './getPreloadedState';
 
 const hasDevToolsCompose = (
   window: Window
@@ -21,6 +22,6 @@ const composeEnhancers = hasDevToolsCompose(window)
 export const createRendererReduxStore = async (): Promise<Store<RootState>> =>
   createStore(
     rootReducer,
-    await getInitialState(),
+    await getPreloadedState(),
     composeEnhancers(applyMiddleware(forwardToMain, catchLastAction))
   );

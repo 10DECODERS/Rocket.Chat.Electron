@@ -1,7 +1,5 @@
-import { SERVERS_LOADED } from '../common/actions/serversActions';
 import { RootState } from '../common/rootReducer';
 import { Server } from '../common/types/Server';
-import { dispatch } from '../store';
 import { joinAppPath } from './joinAppPath';
 import { joinUserPath } from './joinUserPath';
 import { readJsonObject } from './readJsonObject';
@@ -94,14 +92,6 @@ export const mergeServers = async (
       console.warn(error);
     }
   }
-
-  dispatch({
-    type: SERVERS_LOADED,
-    payload: {
-      servers,
-      selected: currentServerUrl,
-    },
-  });
 
   return {
     ...state,

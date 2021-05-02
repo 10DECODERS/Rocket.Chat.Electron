@@ -1,12 +1,14 @@
-import { applyMiddleware, createStore, Store } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import type { Store } from 'redux';
 
 import { catchLastAction } from '../common/catchLastAction';
 import { rootReducer, RootState } from '../common/rootReducer';
-import { forwardToRenderers } from '../store/ipc';
+import { forwardToRenderers } from './forwardToRenderers';
+import { getPreloadedState } from './getPreloadedState';
 
 export const createMainReduxStore = async (): Promise<Store<RootState>> =>
-  createStore(
-    rootReducer,
-    undefined,
-    applyMiddleware(catchLastAction, forwardToRenderers)
-  );
+  configureStore({
+    reducer: rootReducer,
+    preloadedState: await getPreloadedState(),
+    middleware: [catchLastAction, forwardToRenderers],
+  });

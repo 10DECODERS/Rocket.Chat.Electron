@@ -1,6 +1,6 @@
 import { SPELL_CHECKING_LANGUAGE_TOGGLED } from '../common/actions/spellCheckingActions';
+import { dispatch } from '../common/store';
 import { withStore } from '../common/withStore';
-import { dispatch } from '../store';
 import { createMainReduxStore } from './createMainReduxStore';
 import { setupSpellChecking } from './setupSpellChecking';
 

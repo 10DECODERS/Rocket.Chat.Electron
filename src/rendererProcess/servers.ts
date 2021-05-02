@@ -5,8 +5,8 @@ import { createStructuredSelector } from 'reselect';
 import { ROOT_WINDOW_ICON_CHANGED } from '../common/actions/uiActions';
 import Badge from '../common/icons/Badge';
 import { RootState } from '../common/rootReducer';
+import { dispatch, watch } from '../common/store';
 import { Server } from '../common/types/Server';
-import { dispatch, watch } from '../store';
 import { handle } from './ipc';
 
 export const fetchInfo = async (
