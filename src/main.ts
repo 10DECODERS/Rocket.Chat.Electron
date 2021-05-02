@@ -1,49 +1,85 @@
 import { app } from 'electron';
+import i18next from 'i18next';
 
-import { performElectronStartup, setupApp } from './app/main/app';
+import { APP_ERROR_THROWN } from './common/actions/appActions';
 import {
-  mergePersistableValues,
-  watchAndPersistChanges,
-} from './app/main/data';
-import { setUserDataDirectory } from './app/main/dev';
-import { setupDeepLinks, processDeepLinksInArgs } from './deepLinks/main';
-import { setupDownloads } from './downloads/main';
-import { setupMainErrorHandling } from './errors';
-import i18n from './i18n/main';
-import { setupNavigation } from './navigation/main';
-import { setupNotifications } from './notifications/main';
-import { setupScreenSharing } from './screenSharing/main';
-import { setupServers } from './servers/main';
-import { setupSpellChecking } from './spellChecking/main';
-import { createMainReduxStore } from './store';
-import dock from './ui/main/dock';
-import menuBar from './ui/main/menuBar';
+  I18N_LNG_REQUESTED,
+  I18N_LNG_RESPONDED,
+} from './common/actions/i18nActions';
+import { getInitialState } from './common/getInitialState';
+import { getTranslationLanguage } from './common/getTranslationLanguage';
+import resources from './common/i18n';
+import { isTranslationLanguage } from './common/isTranslationLanguage';
+import { fallbackLng } from './common/utils/fallbackLng';
+import { interpolation } from './common/utils/interpolation';
+import { withStore } from './common/withStore';
+import { createMainReduxStore } from './mainProcess/createMainReduxStore';
 import {
-  createRootWindow,
-  showRootWindow,
-  exportLocalStorage,
-} from './ui/main/rootWindow';
-import { attachGuestWebContentsEvents } from './ui/main/serverView';
-import touchBar from './ui/main/touchBar';
-import trayIcon from './ui/main/trayIcon';
-import { setupUpdates } from './updates/main';
-import { setupPowerMonitor } from './userPresence/main';
+  setupDeepLinks,
+  processDeepLinksInArgs,
+} from './mainProcess/deepLinks';
+import dock from './mainProcess/dock';
+import { setupDownloads } from './mainProcess/downloads';
+import { exportLocalStorage } from './mainProcess/exportLocalStorage';
+import menuBar from './mainProcess/menuBar';
+import { mergePersistableValues } from './mainProcess/mergePersistableValues';
+import { mergeServers } from './mainProcess/mergeServers';
+import { mergeTrustedCertificates } from './mainProcess/mergeTrustedCertificates';
+import { mergeUpdatesConfiguration } from './mainProcess/mergeUpdatesConfiguration';
+import { setupNotifications } from './mainProcess/notifications';
+import { performElectronStartup } from './mainProcess/performElectronStartup';
+import { createRootWindow, showRootWindow } from './mainProcess/rootWindow';
+import { attachGuestWebContentsEvents } from './mainProcess/serverView';
+import { setUserDataDirectory } from './mainProcess/setUserDataDirectory';
+import { setupApp } from './mainProcess/setupApp';
+import { setupMainErrorHandling } from './mainProcess/setupMainErrorHandling';
+import { setupNavigation } from './mainProcess/setupNavigation';
+import { setupPowerMonitor } from './mainProcess/setupPowerMonitor';
+import { setupScreenSharing } from './mainProcess/setupScreenSharing';
+import { setupServers } from './mainProcess/setupServers';
+import { setupSpellChecking } from './mainProcess/setupSpellChecking';
+import touchBar from './mainProcess/touchBar';
+import trayIcon from './mainProcess/trayIcon';
+import { setupUpdates } from './mainProcess/updates';
+import { watchAndPersistChanges } from './mainProcess/watchAndPersistChanges';
+import { dispatch, listen } from './store';
+import { hasMeta } from './store/fsa';
 
 const start = async (): Promise<void> => {
   setUserDataDirectory();
   setupMainErrorHandling();
   performElectronStartup();
 
-  createMainReduxStore();
+  withStore(await createMainReduxStore());
 
   await app.whenReady();
 
   const localStorage = await exportLocalStorage();
-  await mergePersistableValues(localStorage);
-  await setupServers(localStorage);
+  await Promise.resolve(getInitialState())
+    .then((state) => mergePersistableValues(state, localStorage))
+    .then((state) => mergeServers(state, localStorage))
+    .then((state) => mergeUpdatesConfiguration(state))
+    .then((state) => mergeTrustedCertificates(state));
 
-  i18n.setUp();
-  await i18n.wait();
+  const lng = getTranslationLanguage(app.getLocale());
+
+  await i18next.init({
+    lng,
+    fallbackLng,
+    resources: {
+      ...(lng &&
+        lng in resources && {
+          [lng]: {
+            translation: await resources[lng](),
+          },
+        }),
+      [fallbackLng]: {
+        translation: await resources[fallbackLng](),
+      },
+    },
+    interpolation,
+    initImmediate: true,
+  });
 
   setupApp();
 
@@ -58,21 +94,20 @@ const start = async (): Promise<void> => {
 
   setupNotifications();
   setupScreenSharing();
-
-  await setupSpellChecking();
-
+  setupSpellChecking();
   setupDeepLinks();
-  await setupNavigation();
+  setupNavigation();
   setupPowerMonitor();
-  await setupUpdates();
+  setupUpdates();
   setupDownloads();
+  setupServers();
 
   dock.setUp();
   menuBar.setUp();
   touchBar.setUp();
   trayIcon.setUp();
 
-  app.addListener('before-quit', () => {
+  app.once('before-quit', () => {
     dock.tearDown();
     menuBar.tearDown();
     touchBar.tearDown();
@@ -82,6 +117,27 @@ const start = async (): Promise<void> => {
   watchAndPersistChanges();
 
   await processDeepLinksInArgs();
+
+  listen(APP_ERROR_THROWN, (action) => {
+    console.error(action.payload);
+  });
+
+  listen(I18N_LNG_REQUESTED, (action) => {
+    if (!hasMeta(action) || !action.meta.id) {
+      return;
+    }
+
+    dispatch({
+      type: I18N_LNG_RESPONDED,
+      payload: isTranslationLanguage(i18next.language)
+        ? i18next.language
+        : undefined,
+      meta: {
+        response: true,
+        id: action.meta?.id,
+      },
+    });
+  });
 };
 
 if (require.main === module) {

@@ -1,4 +1,4 @@
-import { RocketChatDesktopAPI } from './servers/preload/api';
+import { RocketChatDesktopAPI } from './preloadScript/api';
 
 declare global {
   interface Window {

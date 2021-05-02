@@ -1,33 +1,11 @@
-import {
-  applyMiddleware,
-  createStore,
-  Store,
-  compose,
-  Middleware,
-  Dispatch,
-} from 'redux';
+import { applyMiddleware, createStore, Store, compose } from 'redux';
 
-import { RootAction } from './actions';
+import { catchLastAction, lastAction } from '../common/catchLastAction';
+import { RootAction } from '../common/rootAction';
+import { rootReducer, RootState } from '../common/rootReducer';
+import { reduxStore, withStore } from '../common/withStore';
 import { hasPayload, isErrored, isResponseTo } from './fsa';
-import { forwardToRenderers, getInitialState, forwardToMain } from './ipc';
-import { rootReducer, RootState } from './rootReducer';
-
-let reduxStore: Store<RootState>;
-
-let lastAction: RootAction;
-
-const catchLastAction: Middleware = () => (next: Dispatch<RootAction>) => (
-  action
-) => {
-  lastAction = action;
-  return next(action);
-};
-
-export const createMainReduxStore = (): void => {
-  const middlewares = applyMiddleware(catchLastAction, forwardToRenderers);
-
-  reduxStore = createStore(rootReducer, {}, middlewares);
-};
+import { getInitialState, forwardToMain } from './ipc';
 
 export const createRendererReduxStore = async (): Promise<Store> => {
   const initialState = await getInitialState();
@@ -37,7 +15,9 @@ export const createRendererReduxStore = async (): Promise<Store> => {
     applyMiddleware(forwardToMain, catchLastAction)
   );
 
-  reduxStore = createStore(rootReducer, initialState, enhancers);
+  const reduxStore = createStore(rootReducer, initialState, enhancers);
+
+  withStore(reduxStore);
 
   return reduxStore;
 };

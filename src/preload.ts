@@ -1,21 +1,22 @@
 import { contextBridge } from 'electron';
 
-import { setupRendererErrorHandling } from './errors';
-import { invoke } from './ipc/renderer';
-import { JitsiMeetElectron, JitsiMeetElectronAPI } from './jitsi/preload';
-import { listenToNotificationsRequests } from './notifications/preload';
-import { listenToScreenSharingRequests } from './screenSharing/preload';
+import { withStore } from './common/withStore';
 import {
   RocketChatDesktop,
   RocketChatDesktopAPI,
   serverInfo,
-} from './servers/preload/api';
-import { setServerUrl } from './servers/preload/urls';
+} from './preloadScript/api';
+import { JitsiMeetElectron, JitsiMeetElectronAPI } from './preloadScript/jitsi';
+import { listenToMessageBoxEvents } from './preloadScript/messageBox';
+import { listenToNotificationsRequests } from './preloadScript/notifications';
+import { listenToScreenSharingRequests } from './preloadScript/screenSharing';
+import { handleTrafficLightsSpacing } from './preloadScript/trafficLights';
+import { setServerUrl } from './preloadScript/urls';
+import { listenToUserPresenceChanges } from './preloadScript/userPresence';
+import { invoke } from './rendererProcess/ipc';
+import { setupRendererErrorHandling } from './rendererProcess/setupRendererErrorHandling';
+import { whenReady } from './rendererProcess/whenReady';
 import { createRendererReduxStore } from './store';
-import { listenToMessageBoxEvents } from './ui/preload/messageBox';
-import { handleTrafficLightsSpacing } from './ui/preload/sidebar';
-import { listenToUserPresenceChanges } from './userPresence/preload';
-import { whenReady } from './whenReady';
 
 declare global {
   interface Window {
@@ -36,7 +37,8 @@ const start = async (): Promise<void> => {
 
   setServerUrl(serverUrl);
 
-  await createRendererReduxStore();
+  const reduxStore = await createRendererReduxStore();
+  withStore(reduxStore);
 
   await whenReady();
 

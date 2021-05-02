@@ -10,14 +10,14 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import rimraf from 'rimraf';
 
-import { Server } from './servers/common';
-import DmgBackground from './ui/assets/DmgBackground';
-import NsisSideBar from './ui/assets/NsisSideBar';
-import AppIcon from './ui/icons/AppIcon';
-import LinuxTrayIcon from './ui/icons/LinuxTrayIcon';
-import MacOSAppIcon from './ui/icons/MacOSAppIcon';
-import MacOSTrayIcon from './ui/icons/MacOSTrayIcon';
-import WindowsTrayIcon from './ui/icons/WindowsTrayIcon';
+import DmgBackground from './common/assets/DmgBackground';
+import NsisSideBar from './common/assets/NsisSideBar';
+import AppIcon from './common/icons/AppIcon';
+import LinuxTrayIcon from './common/icons/LinuxTrayIcon';
+import MacOSAppIcon from './common/icons/MacOSAppIcon';
+import MacOSTrayIcon from './common/icons/MacOSTrayIcon';
+import WindowsTrayIcon from './common/icons/WindowsTrayIcon';
+import { Server } from './common/types/Server';
 
 const convertSvgToPng = async (
   svg: string,

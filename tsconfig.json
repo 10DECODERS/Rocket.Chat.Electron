@@ -3,7 +3,7 @@
     "rootDir": "./src",
     "module": "ESNext",
     "target": "ES2015",
-    "lib": ["DOM", "ES2015"],
+    "lib": ["DOM", "ES2020"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
