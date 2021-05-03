@@ -17,41 +17,25 @@ import { openDialog } from './reducers/openDialog';
 import { rootWindowIcon } from './reducers/rootWindowIcon';
 import { rootWindowState } from './reducers/rootWindowState';
 import { servers } from './reducers/serversReducers';
-import {
-  doCheckForUpdatesOnStartup,
-  isCheckingForUpdates,
-  isEachUpdatesSettingConfigurable,
-  isUpdatingAllowed,
-  isUpdatingEnabled,
-  newUpdateVersion,
-  skippedUpdateVersion,
-  updateError,
-} from './reducers/updatesReducers';
+import { updatesReducer } from './reducers/updatesReducer';
 
 export const rootReducer = combineReducers({
   app: appReducer,
+  updates: updatesReducer,
   clientCertificates,
   currentView,
-  doCheckForUpdatesOnStartup,
   downloads,
   externalProtocols,
-  isCheckingForUpdates,
-  isEachUpdatesSettingConfigurable,
   isMenuBarEnabled,
   isMessageBoxFocused,
   isShowWindowOnUnreadChangedEnabled,
   isSideBarEnabled,
   isTrayIconEnabled,
-  isUpdatingAllowed,
-  isUpdatingEnabled,
-  newUpdateVersion,
   openDialog,
   rootWindowIcon,
   rootWindowState,
   servers,
-  skippedUpdateVersion,
   trustedCertificates,
-  updateError,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
