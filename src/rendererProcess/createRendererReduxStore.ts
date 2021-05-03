@@ -1,27 +1,29 @@
-import { applyMiddleware, createStore, Store, compose } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import type { Store } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 import { catchLastAction } from '../common/catchLastAction';
 import { rootReducer, RootState } from '../common/rootReducer';
 import { forwardToMain } from './forwardToMain';
 import { getPreloadedState } from './getPreloadedState';
 
-const hasDevToolsCompose = (
-  window: Window
-): window is Window & {
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: typeof compose;
-} =>
-  '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__' in window &&
-  typeof (window as {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: typeof compose;
-  }).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function';
+export const createRendererReduxStore = async <
+  GF extends (...args: any[]) => Generator
+>(
+  rootSaga?: GF,
+  ...args: Parameters<GF>
+): Promise<Store<RootState>> => {
+  const sagaMiddleware = createSagaMiddleware();
 
-const composeEnhancers = hasDevToolsCompose(window)
-  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-  : compose;
+  const store = configureStore({
+    reducer: rootReducer,
+    preloadedState: await getPreloadedState(),
+    middleware: [forwardToMain, sagaMiddleware, catchLastAction],
+  });
 
-export const createRendererReduxStore = async (): Promise<Store<RootState>> =>
-  createStore(
-    rootReducer,
-    await getPreloadedState(),
-    composeEnhancers(applyMiddleware(forwardToMain, catchLastAction))
-  );
+  if (rootSaga) {
+    sagaMiddleware.run(rootSaga, ...args);
+  }
+
+  return store;
+};

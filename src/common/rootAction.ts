@@ -1,8 +1,10 @@
+import { Action, ActionCreator } from 'redux';
+
 import { DeepLinksActionTypeToPayloadMap } from './actions/deepLinksActions';
 import { DownloadsActionTypeToPayloadMap } from './actions/downloadsActions';
 import { NavigationActionTypeToPayloadMap } from './actions/navigationActions';
 import { NotificationsActionTypeToPayloadMap } from './actions/notificationsActions';
-import { ScreenSharingActionTypeToPayloadMap } from './actions/screenSharingActions';
+import type * as screenSharingActions from './actions/screenSharingActions';
 import { SpellCheckingActionTypeToPayloadMap } from './actions/spellCheckingActions';
 import { UiActionTypeToPayloadMap } from './actions/uiActions';
 import { UpdatesActionTypeToPayloadMap } from './actions/updatesActions';
@@ -12,11 +14,18 @@ type ActionTypeToPayloadMap = DeepLinksActionTypeToPayloadMap &
   DownloadsActionTypeToPayloadMap &
   NavigationActionTypeToPayloadMap &
   NotificationsActionTypeToPayloadMap &
-  ScreenSharingActionTypeToPayloadMap &
   SpellCheckingActionTypeToPayloadMap &
   UiActionTypeToPayloadMap &
   UpdatesActionTypeToPayloadMap &
   UserPresenceActionTypeToPayloadMap;
+
+type ActionsFromModule<Module> = {
+  [Field in keyof Module as Module[Field] extends ActionCreator<infer A>
+    ? A extends Action<infer Type>
+      ? Type
+      : never
+    : never]: Module[Field] extends ActionCreator<infer A> ? A : never;
+};
 
 type RootActions = {
   [Type in keyof ActionTypeToPayloadMap]: void extends ActionTypeToPayloadMap[Type]
@@ -27,7 +36,8 @@ type RootActions = {
         type: Type;
         payload: ActionTypeToPayloadMap[Type];
       };
-};
+} &
+  ActionsFromModule<typeof screenSharingActions>;
 
 export type ActionOf<Type extends keyof RootActions> = RootActions[Type];
 

@@ -9,6 +9,7 @@ import {
 import { JitsiMeetElectron, JitsiMeetElectronAPI } from './preloadScript/jitsi';
 import { listenToMessageBoxEvents } from './preloadScript/messageBox';
 import { listenToNotificationsRequests } from './preloadScript/notifications';
+import { rootSaga } from './preloadScript/sagas';
 import { listenToScreenSharingRequests } from './preloadScript/screenSharing';
 import { handleTrafficLightsSpacing } from './preloadScript/trafficLights';
 import { setServerUrl } from './preloadScript/urls';
@@ -37,7 +38,7 @@ const start = async (): Promise<void> => {
 
   setServerUrl(serverUrl);
 
-  const reduxStore = await createRendererReduxStore();
+  const reduxStore = await createRendererReduxStore(rootSaga);
   withStore(reduxStore);
 
   await whenReady();

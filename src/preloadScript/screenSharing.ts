@@ -1,23 +1,16 @@
-import {
-  WEBVIEW_SCREEN_SHARING_SOURCE_REQUESTED,
-  WEBVIEW_SCREEN_SHARING_SOURCE_RESPONDED,
-} from '../common/actions/uiActions';
-import { request } from '../common/store';
+import * as screenSharingActions from '../common/actions/screenSharingActions';
+import { dispatch } from '../common/store';
 
-const handleGetSourceIdEvent = async (): Promise<void> => {
-  try {
-    const sourceId = await request(
-      {
-        type: WEBVIEW_SCREEN_SHARING_SOURCE_REQUESTED,
-      },
-      WEBVIEW_SCREEN_SHARING_SOURCE_RESPONDED
-    );
-    window.top.postMessage({ sourceId }, '*');
-  } catch (error) {
-    window.top.postMessage({ sourceId: 'PermissionDeniedError' }, '*');
-  }
+export const notifyScreenSharingSource = (sourceId: string): void => {
+  window.top.postMessage({ sourceId }, '*');
+};
+
+export const rejectScreenSharingRequest = (): void => {
+  window.top.postMessage({ sourceId: 'PermissionDeniedError' }, '*');
 };
 
 export const listenToScreenSharingRequests = (): void => {
-  window.addEventListener('get-sourceId', handleGetSourceIdEvent);
+  window.addEventListener('get-sourceId', () => {
+    dispatch(screenSharingActions.sourceRequested());
+  });
 };
