@@ -6,10 +6,7 @@ jest.mock(
   (): typeof import('./fetchServerInformation') & { __esModule: true } => ({
     __esModule: true,
     fetchServerInformation: jest.fn(
-      async (urlHref: string): Promise<[urlHref: string, version: string]> => [
-        urlHref,
-        '3.8.0',
-      ]
+      async (url: URL): Promise<[url: URL, version: string]> => [url, '3.8.0']
     ),
   })
 );

@@ -51,34 +51,34 @@ afterEach(() => {
 
 it('reaches the server at root directory', async () => {
   const [effectiveUrl, version] = await fetchServerInformation(
-    'http://localhost:3000/'
+    new URL('http://localhost:3000/')
   );
-  expect(effectiveUrl).toStrictEqual('http://localhost:3000/');
+  expect(effectiveUrl).toStrictEqual(new URL('http://localhost:3000/'));
   expect(version).toStrictEqual(serverVersion);
 });
 
 it('reaches the server at subdirectory', async () => {
   const [effectiveUrl, version] = await fetchServerInformation(
-    'http://localhost:3000/subdir/'
+    new URL('http://localhost:3000/subdir/')
   );
-  expect(effectiveUrl).toStrictEqual('http://localhost:3000/subdir/');
+  expect(effectiveUrl).toStrictEqual(new URL('http://localhost:3000/subdir/'));
   expect(version).toStrictEqual(serverVersion);
 });
 
 it('reaches the server at deep subdirectory', async () => {
   const [effectiveUrl, version] = await fetchServerInformation(
-    'http://localhost:3000/subdir/subdir/subdir/'
+    new URL('http://localhost:3000/subdir/subdir/subdir/')
   );
   expect(effectiveUrl).toStrictEqual(
-    'http://localhost:3000/subdir/subdir/subdir/'
+    new URL('http://localhost:3000/subdir/subdir/subdir/')
   );
   expect(version).toStrictEqual(serverVersion);
 });
 
 it('reaches the server after redirection', async () => {
   const [effectiveUrl, version] = await fetchServerInformation(
-    'http://localhost:3000/redirect'
+    new URL('http://localhost:3000/redirect')
   );
-  expect(effectiveUrl).toStrictEqual('http://localhost:3000/subdir/');
+  expect(effectiveUrl).toStrictEqual(new URL('http://localhost:3000/subdir/'));
   expect(version).toStrictEqual(serverVersion);
 });
